@@ -4,43 +4,69 @@ from PIL import Image, ImageDraw, ImageFont
 
 logger = logging.getLogger(__name__)
 
-
 WIDTH = 1280
 HEIGHT = 720
 
 BACKGROUND_COLOR = (30, 30, 30)
-TEXT_COLOR = (255, 255, 255)
+TITLE_COLOR = (255, 255, 255)
+BODY_COLOR = (200, 200, 200)
 
-FONT_SIZE = 48
+TITLE_FONT_SIZE = 60
+BODY_FONT_SIZE = 40
 
 
-def render_slide(text: str, output_path: Path):
+def render_slide(slide: dict, output_path: Path):
+    """
+    Renders a single slide to PNG image.
+
+    slide format:
+    {
+        "title": "...",
+        "content": ["line1", "line2", ...]
+    }
+    """
+
     try:
+        logger.info(f"Rendering slide: {output_path}")
 
-        logger.info(f"Rendering slide to {output_path}")
+        title = slide["title"]
+        content_lines = slide["content"]
 
         img = Image.new("RGB", (WIDTH, HEIGHT), BACKGROUND_COLOR)
-
         draw = ImageDraw.Draw(img)
 
+        # Load fonts
         try:
-            font = ImageFont.truetype("DejaVuSans.ttf", FONT_SIZE)
-        except:
-            font = ImageFont.load_default()
+            title_font = ImageFont.truetype("DejaVuSans.ttf", TITLE_FONT_SIZE)
+            body_font = ImageFont.truetype("DejaVuSans.ttf", BODY_FONT_SIZE)
+        except Exception:
+            logger.warning("Custom font not found, using default font")
+            title_font = ImageFont.load_default()
+            body_font = ImageFont.load_default()
 
-        wrapped_text = wrap_text(text, 40)
+        # Draw title
+        y = 80
+        draw.text((100, y), title, font=title_font, fill=TITLE_COLOR)
 
-        draw.multiline_text(
-            (100, 100),
-            wrapped_text,
-            fill=TEXT_COLOR,
-            font=font,
-            spacing=10
-        )
+        # Draw content
+        y += 120
+
+        for line in content_lines:
+
+            wrapped = wrap_text(line, 50)
+
+            for wrapped_line in wrapped.split("\n"):
+                draw.text((100, y), wrapped_line, font=body_font, fill=BODY_COLOR)
+                y += 60
+
+            y += 20  # spacing between paragraphs
+
+        # Save image
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
         img.save(output_path)
 
-        logger.info(f"Slide saved: {output_path}")
+        logger.info(f"Slide saved successfully: {output_path}")
 
         return output_path
 
@@ -49,10 +75,12 @@ def render_slide(text: str, output_path: Path):
         raise
 
 
-def render_all_slides(slides, output_dir: Path):
+def render_all_slides(slides: list, output_dir: Path):
+    """
+    Renders all slides and returns list of image paths.
+    """
 
     try:
-
         logger.info("Rendering all slides")
 
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -69,7 +97,7 @@ def render_all_slides(slides, output_dir: Path):
 
             paths.append(str(path))
 
-        logger.info(f"{len(paths)} slides rendered")
+        logger.info(f"{len(paths)} slides rendered successfully")
 
         return paths
 
@@ -78,26 +106,23 @@ def render_all_slides(slides, output_dir: Path):
         raise
 
 
-def wrap_text(text, max_chars):
-
-    lines = []
+def wrap_text(text: str, max_chars: int):
 
     words = text.split()
 
-    line = ""
+    lines = []
+
+    current = ""
 
     for word in words:
 
-        if len(line) + len(word) <= max_chars:
-
-            line += word + " "
-
+        if len(current) + len(word) + 1 <= max_chars:
+            current += word + " "
         else:
+            lines.append(current.strip())
+            current = word + " "
 
-            lines.append(line)
-
-            line = word + " "
-
-    lines.append(line)
+    if current:
+        lines.append(current.strip())
 
     return "\n".join(lines)
