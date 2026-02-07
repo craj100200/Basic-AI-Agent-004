@@ -1,0 +1,31 @@
+[SLIDE_START]
+[TITLE_START]Introduction to Artificial Intelligence[TITLE_END]
+Artificial Intelligence (AI) refers to the simulation of human intelligence in machines.
+It enables systems to perform tasks that normally require human reasoning.
+These tasks include learning, problem-solving, perception, and decision-making.
+AI is widely used in modern applications such as search engines and virtual assistants.
+[SLIDE_END]
+
+[SLIDE_START]
+[TITLE_START]Types of Artificial Intelligence[TITLE_END]
+Narrow AI is designed to perform a specific task efficiently.
+General AI aims to replicate full human cognitive abilities.
+Super AI refers to intelligence surpassing human capabilities.
+Most current real-world systems operate under the Narrow AI category.
+[SLIDE_END]
+
+[SLIDE_START]
+[TITLE_START]Machine Learning and Its Importance[TITLE_END]
+Machine Learning is a subset of AI focused on learning from data.
+It allows systems to improve performance without explicit programming.
+Common techniques include supervised, unsupervised, and reinforcement learning.
+Machine Learning powers recommendation systems, fraud detection, and predictive analytics.
+[SLIDE_END]
+
+[SLIDE_START]
+[TITLE_START]Future and Impact of AI[TITLE_END]
+AI is transforming industries such as healthcare, finance, and transportation.
+It helps automate repetitive tasks and improves efficiency.
+Ethical considerations like fairness, transparency, and safety are important.
+The future of AI will involve deeper integration into everyday human life.
+[SLIDE_END]
