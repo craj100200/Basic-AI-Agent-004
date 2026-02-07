@@ -87,7 +87,7 @@ async def generate(file: UploadFile = File(...)):
         logger.info(f"Slides processed: {len(slides)}")
 
         # Step 3: Render slides to images
-        images = render_slide(slides)
+        images = render_slide(slides, OUTPUT_DIR)
         logger.info(f"Generated {len(images)} slide images")
 
         # Step 4: Create video
