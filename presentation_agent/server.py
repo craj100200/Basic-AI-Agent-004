@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from pathlib import Path
 
 from presentation_agent.tools.parser import parse_file
+from presentation_agent.tools.slide_renderer import render_all_slides
 
 logger = logging.getLogger(__name__)
 
@@ -36,4 +37,27 @@ def parse_endpoint(fileName: str):
 
     except Exception as e:
         logger.exception("Parse endpoint failed")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/render")
+def render_endpoint(fileName: str):
+
+    try:
+
+        file_path = INPUT_DIR / fileName
+
+        slides = parse_file(file_path)
+
+        image_paths = render_all_slides(slides, OUTPUT_DIR)
+
+        return {
+            "images": image_paths,
+            "count": len(image_paths)
+        }
+
+    except Exception as e:
+
+        logger.exception("Render endpoint failed")
+
         raise HTTPException(status_code=500, detail=str(e))
