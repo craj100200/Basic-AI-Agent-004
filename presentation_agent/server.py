@@ -5,7 +5,7 @@ import shutil
 import logging
 
 from presentation_agent.agents.input_agent import InputAgent
-from presentation_agent.tools.slide_renderer import render_slides
+from presentation_agent.tools.slide_renderer import render_slide
 from presentation_agent.tools.video_renderer import create_video
 
 # Setup logging
@@ -87,7 +87,7 @@ async def generate(file: UploadFile = File(...)):
         logger.info(f"Slides processed: {len(slides)}")
 
         # Step 3: Render slides to images
-        images = render_slides(slides)
+        images = render_slide(slides)
         logger.info(f"Generated {len(images)} slide images")
 
         # Step 4: Create video
